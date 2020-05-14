@@ -36,15 +36,18 @@ public class FeatureProperty implements IFeatureProperty {
 	protected final IFeature correspondingFeature;
 
 	protected String description;
+	protected String urls;
 
 	public FeatureProperty(FeatureProperty oldProperty, IFeature correspondingFeature) {
 		this.correspondingFeature = correspondingFeature != null ? correspondingFeature : oldProperty.correspondingFeature;
 		description = oldProperty.description.toString();
+		urls = oldProperty.urls.toString();
 	}
 
 	public FeatureProperty(IFeature correspondingFeature) {
 		this.correspondingFeature = correspondingFeature;
 		description = "";
+		urls = "";
 	}
 
 	@Override
@@ -88,6 +91,17 @@ public class FeatureProperty implements IFeatureProperty {
 	@Override
 	public boolean selectConstraint(boolean state) {
 		throw new UnsupportedOperationException("Not implemented yet");
+	}
+
+	@Override
+	public void setUrls(@Nonnull final CharSequence urls) {
+		this.urls = urls.toString();
+		
+	}
+
+	@Override
+	public String getUrls() {
+		return urls;
 	}
 
 }

@@ -119,6 +119,7 @@ import de.ovgu.featureide.fm.ui.editors.featuremodel.actions.AndAction;
 import de.ovgu.featureide.fm.ui.editors.featuremodel.actions.AutoLayoutConstraintAction;
 import de.ovgu.featureide.fm.ui.editors.featuremodel.actions.CalculateDependencyAction;
 import de.ovgu.featureide.fm.ui.editors.featuremodel.actions.ChangeFeatureDescriptionAction;
+import de.ovgu.featureide.fm.ui.editors.featuremodel.actions.ChangeFeatureUrlsAction;
 import de.ovgu.featureide.fm.ui.editors.featuremodel.actions.CollapseAction;
 import de.ovgu.featureide.fm.ui.editors.featuremodel.actions.CollapseAllAction;
 import de.ovgu.featureide.fm.ui.editors.featuremodel.actions.CollapseSiblingsAction;
@@ -203,6 +204,7 @@ public class FeatureDiagramEditor extends FeatureModelEditorPage implements GUID
 	private AlternativeAction alternativeAction;
 	private RenameAction renameAction;
 	private ChangeFeatureDescriptionAction changeFeatureDescriptionAction;
+	private ChangeFeatureUrlsAction changeFeatureUrlsAction;
 
 	private MoveAction moveStopAction;
 	private MoveAction moveUpAction;
@@ -296,6 +298,7 @@ public class FeatureDiagramEditor extends FeatureModelEditorPage implements GUID
 		alternativeAction = addAction(new AlternativeAction(viewer, featureModelManager));
 		renameAction = addAction(new RenameAction(viewer, featureModelManager, null));
 		changeFeatureDescriptionAction = addAction(new ChangeFeatureDescriptionAction(viewer, featureModelManager, null));
+		changeFeatureUrlsAction = addAction(new ChangeFeatureUrlsAction(viewer, featureModelManager, null));
 
 		// Constraint actions
 		createConstraintAction = addAction(new CreateConstraintAction(viewer, featureModelManager));
@@ -1181,6 +1184,7 @@ public class FeatureDiagramEditor extends FeatureModelEditorPage implements GUID
 			menuManager.add(selectSubtreeAction);
 			menuManager.add(renameAction);
 			menuManager.add(changeFeatureDescriptionAction);
+			menuManager.add(changeFeatureUrlsAction);
 			menuManager.add(deleteAction);
 			menuManager.add(new Separator());
 			connectionEntries(menuManager);

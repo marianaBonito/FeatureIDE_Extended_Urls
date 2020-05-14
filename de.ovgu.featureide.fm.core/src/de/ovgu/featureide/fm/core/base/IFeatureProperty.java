@@ -44,5 +44,9 @@ public interface IFeatureProperty {
 	boolean isConstraintSelected();
 
 	boolean selectConstraint(boolean state);
+	
+	void setUrls(CharSequence urls);
+	
+	String getUrls();
 
 }
