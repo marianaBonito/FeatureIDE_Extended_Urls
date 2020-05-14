@@ -460,6 +460,7 @@ public class StringTable {
 	public static final String CALCULATE_TAUTOLOGY_CONSTRAINTS = "Calculate Tautology Constraints";
 	public static final String CHANGE_DESCRIPTION = "Change Description";
 	public static final String CHANGE_URLS = "Change URLs";
+	public static final String LIST_URLS = "List URLs";
 	public static final String FEATURE_DESCRIPTION = "Feature Description";
 	public static final String FEATURE_URLS = "Feature URLs";
 	public static final String CREATE_FEATURE_ABOVE = "Create Feature Above";

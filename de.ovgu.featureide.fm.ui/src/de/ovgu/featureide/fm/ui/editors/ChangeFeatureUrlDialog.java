@@ -20,6 +20,10 @@
  */
 package de.ovgu.featureide.fm.ui.editors;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
@@ -163,5 +167,32 @@ public class ChangeFeatureUrlDialog extends Dialog implements GUIDefaults {
 			return " ";
 		}
 		return value;
+	}
+
+	private boolean checkUrl(String u) {
+		URL url;
+		try {
+			url = new URL(u);
+			HttpURLConnection con = (HttpURLConnection) url.openConnection();
+			con.setRequestMethod("GET");
+			con.setInstanceFollowRedirects(true);
+			int status = 0;
+			do {
+				status = con.getResponseCode();
+				final String location = con.getHeaderField("Location");
+				final URL newUrl = new URL(location);
+				con = (HttpURLConnection) newUrl.openConnection();
+			} while ((status == HttpURLConnection.HTTP_MOVED_TEMP) || (status == HttpURLConnection.HTTP_MOVED_PERM)); // Checks redirecting
+
+			if ((status >= HttpURLConnection.HTTP_OK) && (status <= HttpURLConnection.HTTP_PARTIAL)) {
+				return true;
+			}
+
+		} catch (final IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return false;
+
 	}
 }
