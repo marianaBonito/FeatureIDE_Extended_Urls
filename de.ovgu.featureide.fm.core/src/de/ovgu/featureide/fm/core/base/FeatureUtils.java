@@ -414,6 +414,12 @@ public final class FeatureUtils {
 
 		return feature.getProperty().getDescription();
 	}
+	
+	public static final String getUrls(IFeature feature) {
+		requireNonNull(feature);
+
+		return feature.getProperty().getUrls();
+	}
 
 	public static final IFeature getFeature(IFeatureModel featureModel, CharSequence name) {
 		requireNonNull(featureModel);
@@ -1016,6 +1022,13 @@ public final class FeatureUtils {
 		requireNonNull(description);
 
 		feature.getProperty().setDescription(description);
+	}
+	
+	public static final void setUrls(IFeature feature, CharSequence urls) {
+		requireNonNull(feature);
+		requireNonNull(urls);
+
+		feature.getProperty().setUrls(urls);
 	}
 
 	public static final boolean setFalseOptionalFeatures(IConstraint constraint) {

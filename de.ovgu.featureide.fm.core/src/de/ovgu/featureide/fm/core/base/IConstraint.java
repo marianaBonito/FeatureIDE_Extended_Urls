@@ -309,5 +309,19 @@ public interface IConstraint extends IFeatureModelElement {
 	 * @return the description
 	 */
 	String getDescription();
+	
+	/**
+	 * Set the urls
+	 *
+	 * @param urls
+	 */
+	void setUrls(String urls);
+
+	/**
+	 * Returns the urls
+	 *
+	 * @return the urls
+	 */
+	String getUrls();
 
 }

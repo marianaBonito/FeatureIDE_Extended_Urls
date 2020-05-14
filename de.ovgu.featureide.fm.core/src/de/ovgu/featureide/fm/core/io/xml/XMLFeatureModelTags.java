@@ -51,6 +51,7 @@ public interface XMLFeatureModelTags {
 	static final String ALT = "alt";
 	static final String AND = "and";
 	static final String DESCRIPTION = "description";
+	static final String URLS = "urls";
 	static final String USER_DEFINED = "userDefined";
 	static final String VAR = "var";
 	static final String IMP = "imp";

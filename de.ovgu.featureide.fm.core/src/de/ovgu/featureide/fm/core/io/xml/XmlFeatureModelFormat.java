@@ -79,7 +79,7 @@ public class XmlFeatureModelFormat extends AXMLFormat<IFeatureModel> implements 
 
 	protected IFeatureModelFactory factory;
 	protected IFeatureNameValidator validator;
-
+	
 	protected final List<Problem> localProblems = new ArrayList<>();
 
 	public XmlFeatureModelFormat() {}
@@ -145,6 +145,7 @@ public class XmlFeatureModelFormat extends AXMLFormat<IFeatureModel> implements 
 
 				constraints.appendChild(rule);
 				addDescription(doc, constraint.getDescription(), rule);
+				addUrls(doc, constraint.getUrls(), rule);
 				addProperties(doc, constraint.getCustomProperties(), rule);
 				createPropositionalConstraints(doc, rule, constraint.getNode());
 			}
@@ -269,6 +270,7 @@ public class XmlFeatureModelFormat extends AXMLFormat<IFeatureModel> implements 
 
 	protected void writeFeatureProperties(Document doc, Element node, IFeature feat, final Element fnod) {
 		addDescription(doc, feat.getProperty().getDescription(), fnod);
+		addUrls(doc, feat.getProperty().getUrls(), fnod);
 		addProperties(doc, feat.getCustomProperties(), fnod);
 		writeAttributes(node, fnod, feat);
 	}
@@ -277,6 +279,13 @@ public class XmlFeatureModelFormat extends AXMLFormat<IFeatureModel> implements 
 		if ((description != null) && !description.trim().isEmpty()) {
 			final Element descr = doc.createElement(DESCRIPTION);
 			descr.setTextContent(description);
+			fnod.appendChild(descr);
+		}
+	}
+	protected void addUrls(Document doc, String urls, Element fnod) {
+		if ((urls != null) && !urls.trim().isEmpty()) {
+			final Element descr = doc.createElement(URLS);
+			descr.setTextContent(urls);
 			fnod.appendChild(descr);
 		}
 	}
@@ -367,6 +376,13 @@ public class XmlFeatureModelFormat extends AXMLFormat<IFeatureModel> implements 
 					throwWarning("Misplaced description element", e);
 				}
 				break;
+			case URLS:
+				if (parent != null) {
+					parent.setUrls(getUrls(e));
+				} else {
+					throwWarning("Misplaced urls element", e);
+				}
+				break;
 			case GRAPHICS:
 				if (parent != null) {
 					parseProperty(parent.getCustomProperties(), e, GRAPHICS);
@@ -425,6 +441,15 @@ public class XmlFeatureModelFormat extends AXMLFormat<IFeatureModel> implements 
 		}
 		return description;
 	}
+	protected String getUrls(final Node e) {
+		String urls = e.getTextContent();
+		// NOTE: THe following code is used for backwards compatibility. It replaces spaces and tabs that were added to the XML for indentation, but don't
+		// belong to the actual urls.
+		if (urls != null) {
+			urls = urls.replaceAll("(\r\n|\r|\n)\\s*", "\n").replaceAll("\\A\n|\n\\Z", "");
+		}
+		return urls;
+	}
 
 	/**
 	 * Parses the feature order section.
@@ -467,6 +492,9 @@ public class XmlFeatureModelFormat extends AXMLFormat<IFeatureModel> implements 
 			switch (nodeName) {
 			case DESCRIPTION:
 				parseDescription(parent, e);
+				break;
+			case URLS:
+				parseUrls(parent, e);
 				break;
 			case GRAPHICS:
 				parseProperty(parent.getCustomProperties(), e, GRAPHICS);
@@ -575,6 +603,11 @@ public class XmlFeatureModelFormat extends AXMLFormat<IFeatureModel> implements 
 	protected void parseDescription(IFeature parent, final Element e) {
 		if (e.getFirstChild() != null) {
 			parent.getProperty().setDescription(getDescription(e.getFirstChild()));
+		}
+	}
+	protected void parseUrls(IFeature parent, final Element e) {
+		if (e.getFirstChild() != null) {
+			parent.getProperty().setUrls(getUrls(e.getFirstChild()));
 		}
 	}
 

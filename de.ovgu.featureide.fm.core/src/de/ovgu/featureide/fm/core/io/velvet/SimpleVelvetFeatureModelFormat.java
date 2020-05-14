@@ -209,6 +209,29 @@ public class SimpleVelvetFeatureModelFormat extends AFeatureModelFormat {
 			sb.append("}");
 		}
 		sb.append(NEWLINE);
+		
+		final String urls = feature.getFeature().getProperty().getUrls();
+		final boolean hasUrls = (urls != null) && !urls.isEmpty();
+
+		if ((feature.getChildrenCount() == 0) && !hasUrls) {
+			sb.append(";");
+		} else {
+			sb.append(" {");
+			sb.append(NEWLINE);
+			if (hasUrls) {
+				writeTab(depth + 1);
+				sb.append("urls \"");
+				sb.append(urls.replace("\"", "\\\""));
+				sb.append("\";");
+				sb.append(NEWLINE);
+			}
+
+			writeFeatureGroup(feature, depth);
+
+			writeTab(depth);
+			sb.append("}");
+		}
+		sb.append(NEWLINE);
 	}
 
 	private void writeNewDefined(IFeatureStructure child2, int depth) {
@@ -637,6 +660,9 @@ public class SimpleVelvetFeatureModelFormat extends AFeatureModelFormat {
 			case VelvetParser.DESCRIPTION:
 				parseDescription(curNode, parentFeature);
 				break;
+			case VelvetParser.URLS:
+				parseUrls(curNode, parentFeature);
+				break;
 			case VelvetParser.EMPTY:
 				break;
 			default:
@@ -654,6 +680,19 @@ public class SimpleVelvetFeatureModelFormat extends AFeatureModelFormat {
 		case VelvetParser.STRING:
 			final String valueNodeText = valueNode.getText();
 			parent.getProperty().setDescription(valueNodeText.substring(1, valueNodeText.length() - 1).replace("\\\"", "\""));
+			break;
+		default:
+			reportSyntaxError(valueNode);
+		}
+	}
+	private void parseUrls(Tree root, IFeature parent) throws RecognitionException {
+		final LinkedList<Tree> nodeList = getChildren(root);
+		final Tree valueNode = nodeList.poll();
+
+		switch (valueNode.getType()) {
+		case VelvetParser.STRING:
+			final String valueNodeText = valueNode.getText();
+			parent.getProperty().setUrls(valueNodeText.substring(1, valueNodeText.length() - 1).replace("\\\"", "\""));
 			break;
 		default:
 			reportSyntaxError(valueNode);

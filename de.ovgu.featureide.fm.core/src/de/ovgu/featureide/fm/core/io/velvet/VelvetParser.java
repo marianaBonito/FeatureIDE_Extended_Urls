@@ -50,7 +50,7 @@ public class VelvetParser extends Parser {
 		"CONCEPT", "CONSTR", "CONSTRAINT", "DEF", "DESCRIPTION", "EMPTY", "END_C", "END_R", "EQ", "ESC_SEQ", "EXPONENT", "FEATURE", "FLOAT", "GROUP",
 		"HEX_DIGIT", "ID", "IDPath", "IMPORT", "IMPORTINSTANCE", "IMPORTINTERFACE", "INT", "MANDATORY", "MINUS", "ML_COMMENT", "OCTAL_ESC", "ONEOF", "OPERAND",
 		"OP_AND", "OP_EQUIVALENT", "OP_IMPLIES", "OP_NOT", "OP_OR", "OP_XOR", "PLUS", "SEMI", "SL_COMMENT", "SOMEOF", "START_C", "START_R", "STRING", "UNARYOP",
-		"UNICODE_ESC", "USE", "VAR_BOOL", "VAR_FLOAT", "VAR_INT", "VAR_STRING", "WS" };
+		"UNICODE_ESC", "USE", "VAR_BOOL", "VAR_FLOAT", "VAR_INT", "VAR_STRING", "WS", "URLS" };
 
 	public static final int EOF = -1;
 	public static final int ABSTRACT = 4;
@@ -115,6 +115,7 @@ public class VelvetParser extends Parser {
 	public static final int VAR_INT = 63;
 	public static final int VAR_STRING = 64;
 	public static final int WS = 65;
+	public static final int URLS = 66;
 
 	// delegates
 	public Parser[] getDelegates() {
@@ -1414,7 +1415,7 @@ public class VelvetParser extends Parser {
 					int alt11 = 2;
 					final int LA11_0 = input.LA(1);
 
-					if (((LA11_0 == CONSTRAINT) || (LA11_0 == DESCRIPTION) || ((LA11_0 >= USE) && (LA11_0 <= VAR_STRING)))) {
+					if (((LA11_0 == CONSTRAINT) || (LA11_0 == DESCRIPTION) || (LA11_0 == URLS) || ((LA11_0 >= USE) && (LA11_0 <= VAR_STRING)))) {
 						alt11 = 1;
 					}
 
@@ -1465,7 +1466,7 @@ public class VelvetParser extends Parser {
 							int alt12 = 2;
 							final int LA12_0 = input.LA(1);
 
-							if (((LA12_0 == CONSTRAINT) || (LA12_0 == DESCRIPTION) || ((LA12_0 >= USE) && (LA12_0 <= VAR_STRING)))) {
+							if (((LA12_0 == CONSTRAINT) || (LA12_0 == DESCRIPTION) || (LA12_0 == URLS) || ((LA12_0 >= USE) && (LA12_0 <= VAR_STRING)))) {
 								alt12 = 1;
 							}
 
@@ -1512,7 +1513,7 @@ public class VelvetParser extends Parser {
 
 							if (((LA13_0 == ABSTRACT) || (LA13_0 == FEATURE) || (LA13_0 == MANDATORY))) {
 								alt13 = 1;
-							} else if (((LA13_0 == CONSTRAINT) || (LA13_0 == DESCRIPTION) || ((LA13_0 >= USE) && (LA13_0 <= VAR_STRING)))) {
+							} else if (((LA13_0 == CONSTRAINT) || (LA13_0 == DESCRIPTION) || (LA13_0 == URLS) || ((LA13_0 >= USE) && (LA13_0 <= VAR_STRING)))) {
 								alt13 = 2;
 							}
 
@@ -1586,7 +1587,7 @@ public class VelvetParser extends Parser {
 	};
 
 	// $ANTLR start "nonFeatureDefinition"
-	// Velvet.g:143:1: nonFeatureDefinition : ( constraint | use | attribute | description );
+	// Velvet.g:143:1: nonFeatureDefinition : ( constraint | use | attribute | description | urls);
 	public final VelvetParser.nonFeatureDefinition_return nonFeatureDefinition() throws RecognitionException {
 		final VelvetParser.nonFeatureDefinition_return retval = new VelvetParser.nonFeatureDefinition_return();
 		retval.start = input.LT(1);
@@ -1600,9 +1601,11 @@ public class VelvetParser extends Parser {
 		VelvetParser.attribute_return attribute51 = null;
 
 		VelvetParser.description_return description52 = null;
+		
+		VelvetParser.urls_return urls53 = null;
 
 		try {
-			// Velvet.g:144:2: ( constraint | use | attribute | description )
+			// Velvet.g:144:2: ( constraint | use | attribute | description | urls)
 			int alt15 = 4;
 			switch (input.LA(1)) {
 			case CONSTRAINT: {
@@ -1622,6 +1625,10 @@ public class VelvetParser extends Parser {
 				break;
 			case DESCRIPTION: {
 				alt15 = 4;
+			}
+				break;
+			case URLS: {
+				alt15 = 5;
 			}
 				break;
 			default:
@@ -1685,6 +1692,20 @@ public class VelvetParser extends Parser {
 				state._fsp--;
 
 				adaptor.addChild(root_0, description52.getTree());
+
+			}
+				break;
+			case 5:
+				// Velvet.g:147:4: description
+			{
+				root_0 = (Tree) adaptor.nil();
+
+				pushFollow(FOLLOW_description_in_nonFeatureDefinition847);
+				urls53 = urls();
+
+				state._fsp--;
+
+				adaptor.addChild(root_0, urls53.getTree());
 
 			}
 				break;
@@ -2319,6 +2340,95 @@ public class VelvetParser extends Parser {
 	}
 	// $ANTLR end "description"
 
+	public static class urls_return extends ParserRuleReturnScope {
+
+		Tree tree;
+
+		@Override
+		public Object getTree() {
+			return tree;
+		}
+	};
+
+	// $ANTLR start "urls"
+	// Velvet.g:170:1: urls : URLS STRING SEMI -> ^( URLS STRING ) ;
+	public final VelvetParser.urls_return urls() throws RecognitionException {
+		final VelvetParser.urls_return retval = new VelvetParser.urls_return();
+		retval.start = input.LT(1);
+
+		Tree root_0 = null;
+
+		Token URLS71 = null;
+		Token STRING72 = null;
+		Token SEMI73 = null;
+
+		final Tree URLS71_tree = null;
+		final Tree STRING72_tree = null;
+		final Tree SEMI73_tree = null;
+		final RewriteRuleTokenStream stream_URLS = new RewriteRuleTokenStream(adaptor, "token URLS");
+		final RewriteRuleTokenStream stream_SEMI = new RewriteRuleTokenStream(adaptor, "token SEMI");
+		final RewriteRuleTokenStream stream_STRING = new RewriteRuleTokenStream(adaptor, "token STRING");
+
+		try {
+			// Velvet.g:171:2: ( URLS STRING SEMI -> ^( URLS STRING ) )
+			// Velvet.g:171:4: URLS STRING SEMI
+			{
+				URLS71 = (Token) match(input, URLS, FOLLOW_DESCRIPTION_in_description995);
+				stream_URLS.add(URLS71);
+
+				STRING72 = (Token) match(input, STRING, FOLLOW_STRING_in_description997);
+				stream_STRING.add(STRING72);
+
+				SEMI73 = (Token) match(input, SEMI, FOLLOW_SEMI_in_description999);
+				stream_SEMI.add(SEMI73);
+
+				// AST REWRITE
+				// elements: STRING, URLS
+				// token labels:
+				// rule labels: retval
+				// token list labels:
+				// rule list labels:
+				// wildcard labels:
+				retval.tree = root_0;
+				final RewriteRuleSubtreeStream stream_retval = new RewriteRuleSubtreeStream(adaptor, "rule retval", retval != null ? retval.tree : null);
+
+				root_0 = (Tree) adaptor.nil();
+				// 172:2: -> ^( URLS STRING )
+				{
+					// Velvet.g:172:5: ^( URLS STRING )
+					{
+						Tree root_1 = (Tree) adaptor.nil();
+						root_1 = (Tree) adaptor.becomeRoot(stream_URLS.nextNode(), root_1);
+
+						adaptor.addChild(root_1, stream_STRING.nextNode());
+
+						adaptor.addChild(root_0, root_1);
+					}
+
+				}
+
+				retval.tree = root_0;
+
+			}
+
+			retval.stop = input.LT(-1);
+
+			retval.tree = (Tree) adaptor.rulePostProcessing(root_0);
+			adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
+
+		} catch (final RecognitionException re) {
+			reportError(re);
+			recover(input, re);
+			retval.tree = (Tree) adaptor.errorNode(input, retval.start, input.LT(-1), re);
+
+		}
+
+		finally {
+			// do for sure before leaving
+		}
+		return retval;
+	}
+	// $ANTLR end "urls"
 	public static class constraint_return extends ParserRuleReturnScope {
 
 		Tree tree;

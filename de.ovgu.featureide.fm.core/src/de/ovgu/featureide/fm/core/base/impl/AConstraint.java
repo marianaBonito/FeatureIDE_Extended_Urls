@@ -53,6 +53,7 @@ public abstract class AConstraint extends AFeatureModelElement implements IConst
 	boolean featureSelected;
 	boolean isImplicit;
 	protected String description;
+	protected String urls;
 
 	protected AConstraint(AConstraint oldConstraint, IFeatureModel featureModel) {
 		super(oldConstraint, featureModel);
@@ -60,6 +61,7 @@ public abstract class AConstraint extends AFeatureModelElement implements IConst
 		featureSelected = oldConstraint.featureSelected;
 		isImplicit = oldConstraint.isImplicit;
 		description = oldConstraint.description;
+		urls = oldConstraint.urls;
 		propertyContainer = new MapPropertyContainer(oldConstraint.propertyContainer);
 	}
 
@@ -69,6 +71,7 @@ public abstract class AConstraint extends AFeatureModelElement implements IConst
 		featureSelected = false;
 		isImplicit = false;
 		description = "";
+		urls = "";
 		propertyContainer = new MapPropertyContainer();
 	}
 
@@ -134,6 +137,16 @@ public abstract class AConstraint extends AFeatureModelElement implements IConst
 	@Override
 	public String getDescription() {
 		return description;
+	}
+	
+	@Override
+	public void setUrls(@Nonnull final String urls) {
+		this.urls = urls;
+	}
+
+	@Override
+	public String getUrls() {
+		return urls;
 	}
 
 }

@@ -97,6 +97,7 @@ public class VelvetLexer extends Lexer {
 	public static final int VAR_INT = 63;
 	public static final int VAR_STRING = 64;
 	public static final int WS = 65;
+	public static final int URLS = 66;
 
 	// delegates
 	// delegators
@@ -378,6 +379,26 @@ public class VelvetLexer extends Lexer {
 		}
 	}
 	// $ANTLR end "DESCRIPTION"
+	
+	// $ANTLR start "URLS"
+	public final void mURLS() throws RecognitionException {
+		try {
+			final int _type = URLS;
+			final int _channel = DEFAULT_TOKEN_CHANNEL;
+			// Velvet.g:16:13: ( 'urls' )
+			// Velvet.g:16:15: 'urls'
+			{
+				match("urls");
+
+			}
+
+			state.type = _type;
+			state.channel = _channel;
+		} finally {
+			// do for sure before leaving
+		}
+	}
+	// $ANTLR end "URLS"
 
 	// $ANTLR start "END_C"
 	public final void mEND_C() throws RecognitionException {
@@ -1865,7 +1886,7 @@ public class VelvetLexer extends Lexer {
 		// Velvet.g:1:8: ( ABSTRACT | ATTR_OP_EQUALS | ATTR_OP_GREATER | ATTR_OP_GREATER_EQ | ATTR_OP_LESS | ATTR_OP_LESS_EQ | ATTR_OP_NOT_EQUALS | CINTERFACE |
 		// COLON | COMMA | CONCEPT | CONSTRAINT | DESCRIPTION | END_C | END_R | EQ | FEATURE | IMPORT | IMPORTINSTANCE | IMPORTINTERFACE | MANDATORY | MINUS |
 		// ONEOF | OP_AND | OP_EQUIVALENT | OP_IMPLIES | OP_NOT | OP_OR | OP_XOR | PLUS | SEMI | SOMEOF | START_C | START_R | USE | VAR_BOOL | VAR_FLOAT |
-		// VAR_INT | VAR_STRING | BOOLEAN | ID | IDPath | INT | FLOAT | STRING | WS | SL_COMMENT | ML_COMMENT )
+		// VAR_INT | VAR_STRING | BOOLEAN | ID | IDPath | INT | FLOAT | STRING | WS | SL_COMMENT | ML_COMMENT | URLS )
 		int alt19 = 48;
 		alt19 = dfa19.predict(input);
 		switch (alt19) {
@@ -2205,7 +2226,14 @@ public class VelvetLexer extends Lexer {
 
 		}
 			break;
+		
+		case 49:
+			// Velvet.g: URLS
+			{
+				mURLS();
 
+			}
+				break;
 		}
 
 	}
@@ -2426,7 +2454,7 @@ public class VelvetLexer extends Lexer {
 
 		@Override
 		public String getDescription() {
-			return "1:1: Tokens : ( ABSTRACT | ATTR_OP_EQUALS | ATTR_OP_GREATER | ATTR_OP_GREATER_EQ | ATTR_OP_LESS | ATTR_OP_LESS_EQ | ATTR_OP_NOT_EQUALS | CINTERFACE | COLON | COMMA | CONCEPT | CONSTRAINT | DESCRIPTION | END_C | END_R | EQ | FEATURE | IMPORT | IMPORTINSTANCE | IMPORTINTERFACE | MANDATORY | MINUS | ONEOF | OP_AND | OP_EQUIVALENT | OP_IMPLIES | OP_NOT | OP_OR | OP_XOR | PLUS | SEMI | SOMEOF | START_C | START_R | USE | VAR_BOOL | VAR_FLOAT | VAR_INT | VAR_STRING | BOOLEAN | ID | IDPath | INT | FLOAT | STRING | WS | SL_COMMENT | ML_COMMENT );";
+			return "1:1: Tokens : ( ABSTRACT | ATTR_OP_EQUALS | ATTR_OP_GREATER | ATTR_OP_GREATER_EQ | ATTR_OP_LESS | ATTR_OP_LESS_EQ | ATTR_OP_NOT_EQUALS | CINTERFACE | COLON | COMMA | CONCEPT | CONSTRAINT | DESCRIPTION | END_C | END_R | EQ | FEATURE | IMPORT | IMPORTINSTANCE | IMPORTINTERFACE | MANDATORY | MINUS | ONEOF | OP_AND | OP_EQUIVALENT | OP_IMPLIES | OP_NOT | OP_OR | OP_XOR | PLUS | SEMI | SOMEOF | START_C | START_R | USE | VAR_BOOL | VAR_FLOAT | VAR_INT | VAR_STRING | BOOLEAN | ID | IDPath | INT | FLOAT | STRING | WS | SL_COMMENT | ML_COMMENT | URLS );";
 		}
 	}
 

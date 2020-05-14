@@ -37,7 +37,7 @@ import de.ovgu.featureide.fm.ui.editors.ChangeFeatureUrlDialog;
  */
 public class ChangeFeatureUrlsAction extends SingleSelectionAction {
 
-	public static final String ID = "de.ovgu.featureide.changefeaturedescription";
+	public static final String ID = "de.ovgu.featureide.changefeatureurls";
 
 	public ChangeFeatureUrlsAction(Object viewer, IFeatureModelManager featureModelManager, Object graphicalViewer) {
 		super(CHANGE_URLS, viewer, ID, featureModelManager);

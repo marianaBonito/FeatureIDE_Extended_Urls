@@ -95,6 +95,10 @@ public class FeatureModelObfuscator implements LongRunningMethod<IFeatureModel> 
 		if ((description != null) && !description.isEmpty()) {
 			obfuscatedFeature.getProperty().setDescription(getObfuscatedDescription(description));
 		}
+		final String urls = orgFeatureStructure.getFeature().getProperty().getUrls();
+		if ((urls != null) && !urls.isEmpty()) {
+			obfuscatedFeature.getProperty().setUrls(getObfuscatedUrls(urls));
+		}
 
 		obfuscatedFeatureModel.addFeature(obfuscatedFeature);
 		final IFeatureStructure obfuscatedFeatureStructure = obfuscatedFeature.getStructure();
@@ -132,6 +136,10 @@ public class FeatureModelObfuscator implements LongRunningMethod<IFeatureModel> 
 		return obfuscate(description, new char[RESULT_LENGTH]);
 	}
 
+	private String getObfuscatedUrls(String urls) {
+		return obfuscate(urls, new char[RESULT_LENGTH]);
+	}
+	
 	private String obfuscate(String string, final char[] result) {
 		digest.reset();
 		digest.update(salt);

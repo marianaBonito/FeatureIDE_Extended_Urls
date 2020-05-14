@@ -60,6 +60,7 @@ VAR_FLOAT=62
 VAR_INT=63
 VAR_STRING=64
 WS=65
+URLS=66
 '!'=48
 '!='=12
 '&&'=45
@@ -84,6 +85,7 @@ WS=65
 'concept'=18
 'constraint'=20
 'description'=22
+'urls'=66
 'feature'=29
 'float'=62
 'import'=35
