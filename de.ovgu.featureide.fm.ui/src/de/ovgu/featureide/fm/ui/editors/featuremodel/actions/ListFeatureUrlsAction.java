@@ -20,43 +20,56 @@
  */
 package de.ovgu.featureide.fm.ui.editors.featuremodel.actions;
 
-import static de.ovgu.featureide.fm.core.localization.StringTable.FEATURE_URLS;
 import static de.ovgu.featureide.fm.core.localization.StringTable.LIST_URLS;
-import static de.ovgu.featureide.fm.core.localization.StringTable.PLEASE_ENTER_URLS_FOR_FEATURE_;
 
-import de.ovgu.featureide.fm.core.base.event.FeatureIDEEvent;
-import de.ovgu.featureide.fm.core.base.event.FeatureIDEEvent.EventType;
+import java.awt.AWTException;
+import java.awt.Robot;
+import java.awt.event.InputEvent;
+
+import org.eclipse.jface.action.MenuManager;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseMoveListener;
+
 import de.ovgu.featureide.fm.core.io.manager.IFeatureModelManager;
-import de.ovgu.featureide.fm.ui.editors.ChangeFeatureUrlDialog;
+import de.ovgu.featureide.fm.ui.editors.FeatureDiagramViewer;
 
 /**
  * TODO description
  *
  * @author mariana
  */
-public class ListUrlAction extends SingleSelectionAction {
+public class ListFeatureUrlsAction extends SingleSelectionAction {
 
 	public static final String ID = "de.ovgu.featureide.listfeatureurls";
 
-	public ListUrlAction(Object viewer, IFeatureModelManager featureModelManager, Object graphicalViewer) {
+	private final MenuManager listUrls;
+	private final MenuManager prevContextMenu;
+
+	public ListFeatureUrlsAction(FeatureDiagramViewer viewer, IFeatureModelManager featureModelManager, MenuManager prevContextMenu) {
 		super(LIST_URLS, viewer, ID, featureModelManager);
+		listUrls = new MenuManager();
+		setEnabled(true);
+		setChecked(false);
+		// listUrls.setRemoveAllWhenShown(true);
+		this.prevContextMenu = prevContextMenu;
 	}
 
 	@Override
 	public void run() {
-		String urls = "";
-		if (feature.getProperty().getUrls() != null) {
-			urls = feature.getProperty().getUrls();
-			urls = urls.trim();
-		}
-		final ChangeFeatureUrlDialog dialog = new ChangeFeatureUrlDialog(null, FEATURE_URLS, PLEASE_ENTER_URLS_FOR_FEATURE_ + feature.getName() + "'", urls);
-		dialog.open();
-		final String urlstemp = dialog.getValue();
+		((FeatureDiagramViewer) viewer).getControl().addMouseMoveListener(new MouseMoveListener() {
 
-		// TODO implement as operation
-		if (!urls.equals(urlstemp.trim())) {
-			feature.getProperty().setUrls(urlstemp);
-			feature.getFeatureModel().fireEvent(new FeatureIDEEvent(feature, EventType.ATTRIBUTE_CHANGED));
+			@Override
+			public void mouseMove(MouseEvent e) {
+				((FeatureDiagramViewer) viewer).setContextMenu(prevContextMenu);
+			}
+		});
+		createUrlList();
+		((FeatureDiagramViewer) viewer).setContextMenu(listUrls);
+		try {
+			final Robot r = new Robot();
+			r.mousePress(InputEvent.BUTTON3_DOWN_MASK);
+		} catch (final AWTException e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -80,9 +93,15 @@ public class ListUrlAction extends SingleSelectionAction {
 				url = splitUrl[0];
 			} else if (splitUrl.length == 2) {
 				url = splitUrl[1];
-				// create action
 			}
+			listUrls.add(new OpenFeatureUrlAction(viewer, featureModelManager, urlLabel, url));
 		}
+	}
+
+	public MenuManager getListUrlsMenu() {
+		createUrlList();
+		return listUrls;
+
 	}
 
 	@Override

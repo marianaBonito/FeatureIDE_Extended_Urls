@@ -44,11 +44,12 @@ public class OpenFeatureUrlAction extends SingleSelectionAction {
 	private final String urlLabel;
 	private final String url;
 
-	public OpenFeatureUrlAction(Object viewer, IFeatureModelManager featureModelManager, Object graphicalViewer, String urlLabel, String url) {
+	public OpenFeatureUrlAction(Object viewer, IFeatureModelManager featureModelManager, String urlLabel, String url) {
 		super(urlLabel, viewer, ID, featureModelManager);
 		this.urlLabel = urlLabel;
 		this.url = url;
-
+		setEnabled(true);
+		setChecked(false);
 	}
 
 	@Override

@@ -139,6 +139,7 @@ import de.ovgu.featureide.fm.ui.editors.featuremodel.actions.HiddenAction;
 import de.ovgu.featureide.fm.ui.editors.featuremodel.actions.LayoutSelectionAction;
 import de.ovgu.featureide.fm.ui.editors.featuremodel.actions.LegendAction;
 import de.ovgu.featureide.fm.ui.editors.featuremodel.actions.LegendLayoutAction;
+import de.ovgu.featureide.fm.ui.editors.featuremodel.actions.ListFeatureUrlsAction;
 import de.ovgu.featureide.fm.ui.editors.featuremodel.actions.MandatoryAction;
 import de.ovgu.featureide.fm.ui.editors.featuremodel.actions.MoveAction;
 import de.ovgu.featureide.fm.ui.editors.featuremodel.actions.NameTypeSelectionAction;
@@ -205,6 +206,7 @@ public class FeatureDiagramEditor extends FeatureModelEditorPage implements GUID
 	private RenameAction renameAction;
 	private ChangeFeatureDescriptionAction changeFeatureDescriptionAction;
 	private ChangeFeatureUrlsAction changeFeatureUrlsAction;
+	private ListFeatureUrlsAction listFeatureUrlsAction;
 
 	private MoveAction moveStopAction;
 	private MoveAction moveUpAction;
@@ -1040,6 +1042,7 @@ public class FeatureDiagramEditor extends FeatureModelEditorPage implements GUID
 		viewer.setContextMenu(menuManager);
 		// the following line adds package explorer entries into our context menu
 		// getSite().registerContextMenu(menu, graphicalViewer);
+		listFeatureUrlsAction = addAction(new ListFeatureUrlsAction(viewer, getFeatureModel(), menuManager));
 	}
 
 	public void createKeyBindings() {
@@ -1059,6 +1062,8 @@ public class FeatureDiagramEditor extends FeatureModelEditorPage implements GUID
 		handler.put(KeyStroke.getReleased(SWT.CTRL, SWT.CTRL), moveStopAction);
 		handler.put(KeyStroke.getReleased(0, SWT.CTRL), moveStopAction);
 		handler.put(KeyStroke.getReleased(SWT.CTRL, 0), moveStopAction);
+
+		handler.put(KeyStroke.getPressed((char) (('u' - 'a') + 1), 'u', SWT.CTRL), listFeatureUrlsAction);
 	}
 
 	public void createMouseHandlers() {
@@ -1185,6 +1190,7 @@ public class FeatureDiagramEditor extends FeatureModelEditorPage implements GUID
 			menuManager.add(renameAction);
 			menuManager.add(changeFeatureDescriptionAction);
 			menuManager.add(changeFeatureUrlsAction);
+			menuManager.add(listFeatureUrlsAction.getListUrlsMenu());
 			menuManager.add(deleteAction);
 			menuManager.add(new Separator());
 			connectionEntries(menuManager);
