@@ -22,6 +22,7 @@ package de.ovgu.featureide.fm.ui.editors.featuremodel.actions;
 
 import static de.ovgu.featureide.fm.core.localization.StringTable.CHANGE_URLS;
 import static de.ovgu.featureide.fm.core.localization.StringTable.FEATURE_URLS;
+import static de.ovgu.featureide.fm.core.localization.StringTable.FEATURE_URL_FORMAT;
 import static de.ovgu.featureide.fm.core.localization.StringTable.PLEASE_ENTER_URLS_FOR_FEATURE_;
 
 import de.ovgu.featureide.fm.core.base.event.FeatureIDEEvent;
@@ -51,7 +52,8 @@ public class ChangeFeatureUrlsAction extends SingleSelectionAction {
 			urls = feature.getProperty().getUrls();
 			urls = urls.trim();
 		}
-		final ChangeFeatureUrlDialog dialog = new ChangeFeatureUrlDialog(null, FEATURE_URLS, PLEASE_ENTER_URLS_FOR_FEATURE_ + feature.getName() + "'", urls);
+		final ChangeFeatureUrlDialog dialog =
+			new ChangeFeatureUrlDialog(null, FEATURE_URLS, PLEASE_ENTER_URLS_FOR_FEATURE_ + feature.getName() + "'\n" + FEATURE_URL_FORMAT, urls);
 		dialog.open();
 		final String urlstemp = dialog.getValue();
 

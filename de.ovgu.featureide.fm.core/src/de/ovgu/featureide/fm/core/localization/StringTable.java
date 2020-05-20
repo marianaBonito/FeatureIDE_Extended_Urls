@@ -1029,6 +1029,8 @@ public class StringTable {
 	public static final String DOES_NOT_EXIST_ = " does not exist.";
 	public static final String PLEASE_ENTER_A_DESCRIPTION_FOR_FEATURE_ = "Please enter a description for feature '";
 	public static final String PLEASE_ENTER_URLS_FOR_FEATURE_ = "Please enter URLS for feature '";
+	public static final String FEATURE_URL_FORMAT = "Make sure URLs are complete: include http:// or https://\nValid input examples:\nhttp://www.featureide.com/\nor\nFeatureIDE - http://www.featureide.com/ ";
+	public static final String FEATURE_URL_TOOL_TIP = "Please add one Label (optional) and the corresponding URL per line.\nThere are two acceptable formats for each input line:\n   'Label' - 'URL'\n   'URL'\nWarning: Labels must not contain ' - '";
 	public static final String NOT_FOUND = "not found";
 	public static final String REMOVED_PRODUCTS = "Removed products";
 	public static final String MINUS = "minus";

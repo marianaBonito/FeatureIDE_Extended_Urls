@@ -20,9 +20,14 @@
  */
 package de.ovgu.featureide.fm.ui.editors;
 
+import static de.ovgu.featureide.fm.core.localization.StringTable.FEATURE_URL_TOOL_TIP;
+
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -58,13 +63,17 @@ public class ChangeFeatureUrlDialog extends Dialog implements GUIDefaults {
 
 	private CLabel label;
 
+	private boolean lostInternet;
+
 	private final String initmessage;
 
 	public ChangeFeatureUrlDialog(Shell parentShell, String dialogTitle, String dialogMessage, String initialValue) {
 		super(parentShell);
+		super.setShellStyle(SWT.TITLE);
 		title = dialogTitle;
 		message = dialogMessage;
 		initmessage = message;
+		lostInternet = false;
 		if (initialValue == null) {
 			value = "";
 		} else {
@@ -72,33 +81,66 @@ public class ChangeFeatureUrlDialog extends Dialog implements GUIDefaults {
 		}
 	}
 
-	protected void validate() {
-		if (text.getText().contains(">") || (text.getText().contains("<"))) {
-
-			if (text.getText().contains(">")) {
-				message = "Description contains invalid char '>'";
-				label.setText(message);
-				label.setImage(ERROR_IMAGE);
-				okButton.setEnabled(false);
-			}
-
-			if (text.getText().contains("<")) {
-				message = "Description contains invalid char '<'";
-				label.setText(message);
-				label.setImage(ERROR_IMAGE);
-				okButton.setEnabled(false);
-			}
-		} else {
+	protected boolean validate() {
+		if (!hasInternet()) {
 			label.setText(initmessage);
 			label.setImage(null);
 			okButton.setEnabled(true);
+			noInternetPopUp();
+			return true;
 		}
+		String firstError = "";
+		int nErrors = 0;
+		final String[] urls = value.split("\n");
+		for (final String u : urls) {
+			if (u.isBlank()) {
+				continue;
+			}
+			final String[] splitUrl = u.split(" - ");
+			String url = null;
+			if (splitUrl.length == 1) {
+				url = splitUrl[0];
+			} else if (splitUrl.length == 2) {
+				url = splitUrl[1];
+			}
+			if ((splitUrl.length > 2) || !checkUrl(url)) {
+				if (nErrors == 0) {
+					firstError = splitUrl[0];
+				}
+				nErrors++;
+
+			}
+		}
+		if (lostInternet) {
+			noInternetPopUp();
+		}
+		if (nErrors > 0) {
+			message = "Error while validating:\n";
+			if (nErrors == 1) {
+				message += "There is 1 error\nIn ";
+			} else {
+				message += "There are " + nErrors + " errors.\nThe first error is in ";
+			}
+			message += "line '" + firstError + "'.\nPlease check all URLs are correct, in the right format, and try again.";
+			label.setText(message);
+			label.setImage(ERROR_IMAGE);
+			okButton.setEnabled(false);
+			return false;
+		}
+		label.setText(initmessage);
+		label.setImage(null);
+		okButton.setEnabled(true);
+		return true;
+
 	}
 
 	@Override
 	protected void buttonPressed(int buttonId) {
 		if (buttonId == IDialogConstants.OK_ID) {
 			value = text.getText();
+			if (!validate()) {
+				return;
+			}
 		} else {
 			value = null;
 		}
@@ -129,6 +171,7 @@ public class ChangeFeatureUrlDialog extends Dialog implements GUIDefaults {
 		if (message != null) {
 			label = new CLabel(composite, SWT.WRAP);
 			label.setText(message);
+			label.setToolTipText(FEATURE_URL_TOOL_TIP);
 			final GridData data =
 				new GridData(GridData.GRAB_HORIZONTAL | GridData.GRAB_VERTICAL | GridData.HORIZONTAL_ALIGN_FILL | GridData.VERTICAL_ALIGN_CENTER);
 			data.widthHint = convertHorizontalDLUsToPixels(IDialogConstants.MINIMUM_MESSAGE_AREA_WIDTH);
@@ -136,13 +179,13 @@ public class ChangeFeatureUrlDialog extends Dialog implements GUIDefaults {
 			label.setFont(parent.getFont());
 		}
 		text = new Text(composite, getInputTextStyle());
-		text.setLayoutData(new GridData(350, 100));
+		text.setLayoutData(new GridData(500, 100));
 
 		text.addModifyListener(new ModifyListener() {
 
 			@Override
 			public void modifyText(ModifyEvent e) {
-				validate();
+				okButton.setEnabled(true);
 			}
 		});
 
@@ -170,20 +213,46 @@ public class ChangeFeatureUrlDialog extends Dialog implements GUIDefaults {
 	}
 
 	private boolean checkUrl(String u) {
-		URL url;
+		if (!hasInternet()) {
+			lostInternet = true;
+			return true;
+		}
+		URL url = null;
 		try {
 			url = new URL(u);
+		} catch (final Exception e) {
+			return false;
+		}
+		try {
 			HttpURLConnection con = (HttpURLConnection) url.openConnection();
 			con.setRequestMethod("GET");
 			con.setInstanceFollowRedirects(true);
-			int status = 0;
-			do {
-				status = con.getResponseCode();
+			int status = con.getResponseCode();
+			while ((status == HttpURLConnection.HTTP_MOVED_TEMP) || (status == HttpURLConnection.HTTP_MOVED_PERM)) {// Checks redirecting
 				final String location = con.getHeaderField("Location");
 				final URL newUrl = new URL(location);
 				con = (HttpURLConnection) newUrl.openConnection();
-			} while ((status == HttpURLConnection.HTTP_MOVED_TEMP) || (status == HttpURLConnection.HTTP_MOVED_PERM)); // Checks redirecting
+				status = con.getResponseCode();
 
+			}
+			if ((status >= HttpURLConnection.HTTP_OK) && (status <= HttpURLConnection.HTTP_PARTIAL)) {
+				return true;
+			}
+
+		} catch (final Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	private boolean hasInternet() {
+		URL url;
+		try {
+			url = new URL("https://www.google.com/"); // reliable link
+			final HttpURLConnection con = (HttpURLConnection) url.openConnection();
+			con.setRequestMethod("GET");
+			final int status = con.getResponseCode();
 			if ((status >= HttpURLConnection.HTTP_OK) && (status <= HttpURLConnection.HTTP_PARTIAL)) {
 				return true;
 			}
@@ -195,4 +264,17 @@ public class ChangeFeatureUrlDialog extends Dialog implements GUIDefaults {
 		return false;
 
 	}
+
+	private void noInternetPopUp() {
+		String errorMessage = null, errorTitle = null;
+		if (!lostInternet) {
+			errorTitle = "No internet connection";
+			errorMessage = "Unable to verify validity of URLs";
+		} else {
+			errorTitle = "Lost internet connection while validating URLs";
+			errorMessage = "Unable to verify validity of all URLs, because the internet connection was lost";
+		}
+		JOptionPane.showMessageDialog(new JFrame(), errorMessage, errorTitle, JOptionPane.WARNING_MESSAGE);
+	}
+
 }
