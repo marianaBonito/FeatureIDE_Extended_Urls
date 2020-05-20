@@ -24,6 +24,7 @@ import static de.ovgu.featureide.fm.core.localization.StringTable.FEATURE_URL_TO
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 
 import javax.swing.JFrame;
@@ -220,11 +221,13 @@ public class ChangeFeatureUrlDialog extends Dialog implements GUIDefaults {
 		URL url = null;
 		try {
 			url = new URL(u);
-		} catch (final Exception e) {
+		} catch (final MalformedURLException e) {
 			return false;
 		}
 		try {
 			HttpURLConnection con = (HttpURLConnection) url.openConnection();
+			con.setConnectTimeout(5000);
+			con.setReadTimeout(5000);
 			con.setRequestMethod("GET");
 			con.setInstanceFollowRedirects(true);
 			int status = con.getResponseCode();
@@ -238,10 +241,9 @@ public class ChangeFeatureUrlDialog extends Dialog implements GUIDefaults {
 			if ((status >= HttpURLConnection.HTTP_OK) && (status <= HttpURLConnection.HTTP_PARTIAL)) {
 				return true;
 			}
-
-		} catch (final Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (final IOException e) {
+			lostInternet = true;
+			return true;
 		}
 		return false;
 	}
@@ -251,6 +253,8 @@ public class ChangeFeatureUrlDialog extends Dialog implements GUIDefaults {
 		try {
 			url = new URL("https://www.google.com/"); // reliable link
 			final HttpURLConnection con = (HttpURLConnection) url.openConnection();
+			con.setConnectTimeout(5000);
+			con.setReadTimeout(5000);
 			con.setRequestMethod("GET");
 			final int status = con.getResponseCode();
 			if ((status >= HttpURLConnection.HTTP_OK) && (status <= HttpURLConnection.HTTP_PARTIAL)) {
