@@ -301,7 +301,6 @@ public class FeatureDiagramEditor extends FeatureModelEditorPage implements GUID
 		renameAction = addAction(new RenameAction(viewer, featureModelManager, null));
 		changeFeatureDescriptionAction = addAction(new ChangeFeatureDescriptionAction(viewer, featureModelManager, null));
 		changeFeatureUrlsAction = addAction(new ChangeFeatureUrlsAction(viewer, featureModelManager, null));
-		listFeatureUrlsAction = addAction(new ListFeatureUrlsAction(viewer, featureModelManager, null, null));
 
 		// Constraint actions
 		createConstraintAction = addAction(new CreateConstraintAction(viewer, featureModelManager));
@@ -1043,7 +1042,7 @@ public class FeatureDiagramEditor extends FeatureModelEditorPage implements GUID
 		viewer.setContextMenu(menuManager);
 		// the following line adds package explorer entries into our context menu
 		// getSite().registerContextMenu(menu, graphicalViewer);
-		// listFeatureUrlsAction = addAction(new ListFeatureUrlsAction(viewer, getFeatureModel(), menuManager, null));
+		listFeatureUrlsAction = addAction(new ListFeatureUrlsAction(viewer, getFeatureModel(), menuManager, null));
 	}
 
 	public void createKeyBindings() {

@@ -75,7 +75,6 @@ public class ListFeatureUrlsAction extends SingleSelectionAction {
 			}
 		});
 
-		createUrlList();
 		((FeatureDiagramViewer) viewer).setContextMenu(listUrls);
 		try {
 			final Robot r = new Robot();
@@ -111,7 +110,6 @@ public class ListFeatureUrlsAction extends SingleSelectionAction {
 	}
 
 	public MenuManager getListUrlsMenu() {
-		createUrlList();
 		return listUrls;
 
 	}
