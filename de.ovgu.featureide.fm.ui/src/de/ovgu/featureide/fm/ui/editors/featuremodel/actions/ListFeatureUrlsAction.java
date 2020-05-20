@@ -26,11 +26,14 @@ import java.awt.AWTException;
 import java.awt.Robot;
 import java.awt.event.InputEvent;
 
+import org.eclipse.jface.action.IMenuListener;
+import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseMoveListener;
 
 import de.ovgu.featureide.fm.core.io.manager.IFeatureModelManager;
+import de.ovgu.featureide.fm.ui.FMUIPlugin;
 import de.ovgu.featureide.fm.ui.editors.FeatureDiagramViewer;
 
 /**
@@ -45,12 +48,20 @@ public class ListFeatureUrlsAction extends SingleSelectionAction {
 	private final MenuManager listUrls;
 	private final MenuManager prevContextMenu;
 
-	public ListFeatureUrlsAction(FeatureDiagramViewer viewer, IFeatureModelManager featureModelManager, MenuManager prevContextMenu) {
+	public ListFeatureUrlsAction(Object viewer, IFeatureModelManager featureModelManager, MenuManager prevContextMenu, Object graphicalViewer) {
 		super(LIST_URLS, viewer, ID, featureModelManager);
-		listUrls = new MenuManager();
+		setImageDescriptor(FMUIPlugin.getDefault().getImageDescriptor("icons/write_obj.gif"));
+		listUrls = new MenuManager(LIST_URLS, null);
+		listUrls.setRemoveAllWhenShown(true);
+		listUrls.addMenuListener(new IMenuListener() {
+
+			@Override
+			public void menuAboutToShow(IMenuManager arg0) {
+				createUrlList();
+			}
+		});
 		setEnabled(true);
 		setChecked(false);
-		// listUrls.setRemoveAllWhenShown(true);
 		this.prevContextMenu = prevContextMenu;
 	}
 
@@ -63,6 +74,7 @@ public class ListFeatureUrlsAction extends SingleSelectionAction {
 				((FeatureDiagramViewer) viewer).setContextMenu(prevContextMenu);
 			}
 		});
+
 		createUrlList();
 		((FeatureDiagramViewer) viewer).setContextMenu(listUrls);
 		try {
