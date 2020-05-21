@@ -1190,8 +1190,9 @@ public class FeatureDiagramEditor extends FeatureModelEditorPage implements GUID
 			menuManager.add(renameAction);
 			menuManager.add(changeFeatureDescriptionAction);
 			menuManager.add(changeFeatureUrlsAction);
-			menuManager.add(listFeatureUrlsAction.getListUrlsMenu());
-			// menuManager.add(createUrlList(selection));
+			if (listFeatureUrlsAction.getNumberActions() > 0) {
+				menuManager.add(listFeatureUrlsAction.getListUrlsMenu());
+			}
 			menuManager.add(deleteAction);
 			menuManager.add(new Separator());
 			connectionEntries(menuManager);

@@ -109,6 +109,26 @@ public class ListFeatureUrlsAction extends SingleSelectionAction {
 		}
 	}
 
+	public int getNumberActions() {
+		final String urls = feature.getProperty().getUrls();
+		if ((urls == null) || urls.isBlank()) {
+			return 0;
+		}
+		int counter = 0;
+		final String[] us = urls.split("\n");
+		for (final String u : us) {
+			if (u.isBlank()) {
+				continue;
+			}
+			final String[] splitUrl = u.split(" - ");
+			if (splitUrl.length > 2) {
+				continue;
+			}
+			counter++;
+		}
+		return counter;
+	}
+
 	public MenuManager getListUrlsMenu() {
 		return listUrls;
 
